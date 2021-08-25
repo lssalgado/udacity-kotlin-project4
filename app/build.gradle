@@ -122,5 +122,8 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$playServicesVersion"
     implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
 
+    //Firebase
+    implementation "com.google.firebase:firebase-bom:$firebaseVersion"
+
 
 }

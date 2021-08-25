@@ -18,19 +18,17 @@ A Todo list app with location reminders that remind the user to do something whe
 
 Step by step explanation of how to get a dev environment running.
 
-```
-1. To enable Firebase Authentication:
-        a. Go to the authentication tab at the Firebase console and enable Email/Password and Google Sign-in methods.
-        b. download `google-services.json` and add it to the app.
-2. To enable Google Maps:
-    a. Go to APIs & Services at the Google console.
-    b. Select your project and go to APIs & Credentials.
-    c. Create a new api key and restrict it for android apps.
-    d. Add your package name and SHA-1 signing-certificate fingerprint.
-    c. Enable Maps SDK for Android from API restrictions and Save.
-    d. Copy the api key to the `google_maps_api.xml`
-3. Run the app on your mobile phone or emulator with Google Play Services in it.
-```
+- [x] To enable Firebase Authentication:
+        - [x] Go to the authentication tab at the Firebase console and enable Email/Password and Google Sign-in methods.
+        - [x] download `google-services.json` and add it to the app.
+- [x] To enable Google Maps:
+    - [x] Go to APIs & Services at the Google console.
+    - [x] Select your project and go to APIs & Credentials.
+    - [x] Create a new api key and restrict it for android apps.
+    - [x] Add your package name and SHA-1 signing-certificate fingerprint.
+    - [x] Enable Maps SDK for Android from API restrictions and Save.
+    - [x] Copy the api key to the `google_maps_api.xml`
+- [x] Run the app on your mobile phone or emulator with Google Play Services in it.
 
 ## Testing
 
@@ -48,22 +46,22 @@ Explain what each test does and why
 ```
 
 ## Project Instructions
-    1. Create a Login screen to ask users to login using an email address or a Google account.  Upon successful login, navigate the user to the Reminders screen.   If there is no account, the app should navigate to a Register screen.
-    2. Create a Register screen to allow a user to register using an email address or a Google account.
-    3. Create a screen that displays the reminders retrieved from local storage. If there are no reminders, display a   "No Data"  indicator.  If there are any errors, display an error message.
-    4. Create a screen that shows a map with the user's current location and asks the user to select a point of interest to create a reminder.
-    5. Create a screen to add a reminder when a user reaches the selected location.  Each reminder should include
-        a. title
-        b. description
-        c. selected location
-    6. Reminder data should be saved to local storage.
-    7. For each reminder, create a geofencing request in the background that fires up a notification when the user enters the geofencing area.
-    8. Provide testing for the ViewModels, Coroutines and LiveData objects.
-    9. Create a FakeDataSource to replace the Data Layer and test the app in isolation.
-    10. Use Espresso and Mockito to test each screen of the app:
-        a. Test DAO (Data Access Object) and Repository classes.
-        b. Add testing for the error messages.
-        c. Add End-To-End testing for the Fragments navigation.
+- [ ] Create a Login screen to ask users to login using an email address or a Google account.  Upon successful login, navigate the user to the Reminders screen.   If there is no account, the app should navigate to a Register screen.
+- [ ] Create a Register screen to allow a user to register using an email address or a Google account.
+- [ ] Create a screen that displays the reminders retrieved from local storage. If there are no reminders, display a   "No Data"  indicator.  If there are any errors, display an error message.
+- [ ] Create a screen that shows a map with the user's current location and asks the user to select a point of interest to create a reminder.
+- [ ] Create a screen to add a reminder when a user reaches the selected location.  Each reminder should include
+    - [ ] title
+    - [ ] description
+    - [ ] selected location
+- [ ] Reminder data should be saved to local storage.
+- [ ] For each reminder, create a geofencing request in the background that fires up a notification when the user enters the geofencing area.
+- [ ] Provide testing for the ViewModels, Coroutines and LiveData objects.
+- [ ] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
+- [ ] Use Espresso and Mockito to test each screen of the app:
+    - [ ] Test DAO (Data Access Object) and Repository classes.
+    - [ ] Add testing for the error messages.
+    - [ ] Add End-To-End testing for the Fragments navigation.
 
 
 ## Student Deliverables:
