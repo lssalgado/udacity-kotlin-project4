@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.udacity.project4.R
 import com.udacity.project4.locationreminders.RemindersActivity
@@ -34,10 +35,6 @@ class AuthenticationActivity : AppCompatActivity() {
                 }
             }
         })
-
-//          TODO: a bonus is to customize the sign in flow to look nice using :
-        //https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
-
     }
 
     // Extracted from:
@@ -49,12 +46,18 @@ class AuthenticationActivity : AppCompatActivity() {
             AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
+        val customLayout =
+            AuthMethodPickerLayout.Builder(R.layout.login_layout).setEmailButtonId(R.id.emailButton)
+                .setGoogleButtonId(R.id.googleButton).build()
+
         // Create and launch sign-in intent. We listen to the response of this activity with the
         // SIGN_IN_RESULT_CODE code.
         startActivityForResult(
-            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(
-                providers
-            ).build(), SIGN_IN_RESULT_CODE
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setAuthMethodPickerLayout(customLayout)
+                .build(), SIGN_IN_RESULT_CODE
         )
     }
 }
