@@ -18,9 +18,9 @@ A Todo list app with location reminders that remind the user to do something whe
 
 Step by step explanation of how to get a dev environment running.
 
-- [ ] To enable Firebase Authentication:
-        - [ ] Go to the authentication tab at the Firebase console and enable Email/Password and Google Sign-in methods.
-        - [ ] download `google-services.json` and add it to the app.
+- [x] To enable Firebase Authentication:
+        - [x] Go to the authentication tab at the Firebase console and enable Email/Password and Google Sign-in methods.
+        - [x] download `google-services.json` and add it to the app.
 - [ ] To enable Google Maps:
     - [ ] Go to APIs & Services at the Google console.
     - [ ] Select your project and go to APIs & Credentials.
