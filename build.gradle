@@ -64,5 +64,6 @@ ext {
     androidXTestRulesVersion = '1.2.0-beta01'
     espressoVersion = '3.2.0'
     firebaseVersion = '28.4.0'
+    firebaseUIVersion = '5.0.0'
 
 }
