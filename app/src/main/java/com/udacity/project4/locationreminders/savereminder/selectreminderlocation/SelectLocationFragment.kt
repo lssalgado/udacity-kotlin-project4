@@ -227,6 +227,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             marker = map.addMarker(
                 markerOptions
             )
+            binding.saveButton.visibility = View.VISIBLE
         }
     }
 
