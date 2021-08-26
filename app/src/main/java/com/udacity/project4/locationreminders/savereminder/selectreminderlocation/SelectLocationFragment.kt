@@ -2,34 +2,58 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 
 
 import android.Manifest
-import android.app.Activity
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-import android.content.IntentSender
-import android.content.pm.PackageManager
-import android.content.res.Resources
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.view.*
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
+import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
-import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
+import com.udacity.project4.utils.checkSelfPermissions
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
+import timber.log.Timber
+
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
+
+    private val requestCode = 1010
+
+    private val permissions = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    private var permissionsGranted = false
+
+    private val locationManager: LocationManager by lazy {
+        requireActivity().getSystemService(
+            Context.LOCATION_SERVICE
+        ) as LocationManager
+    }
+
+    private val locationListener = LocationListener { location ->
+            val longitude = location.longitude
+            val latitude = location.latitude
+            zoomMapToLocation(longitude, latitude)
+        }
+
+    private var hasCentered = false
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
@@ -51,8 +75,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
-//        TODO: add the map setup implementation
-//        TODO: zoom to the user location after taking his permission
+
+        checkPermissions()
 //        TODO: add style to the map
 //        TODO: put a marker to location that the user selected
 
@@ -61,6 +85,76 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         onLocationSelected()
 
         return binding.root
+    }
+
+    private fun checkPermissions() {
+        val missingPermissions = checkSelfPermissions(permissions, context!!)
+        if (missingPermissions.isNotEmpty()) {
+            requestPermissions(missingPermissions, requestCode)
+        } else {
+            permissionsGranted = true
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == this.requestCode) {
+            val missingPermissions = checkSelfPermissions(this.permissions, context!!)
+            if (missingPermissions.isNotEmpty()) {
+                Timber.e("The following permissions were not granted: ${missingPermissions.contentDeepToString()}")
+                Snackbar.make(
+                    binding.root,
+                    "Map won't be centered due to missing permissions!!",
+                    Snackbar.LENGTH_LONG
+                )
+                    // Extracted from: https://github.com/udacity/android-kotlin-geo-fences/blob/master/app/src/main/java/com/example/android/treasureHunt/HuntMainActivity.kt#L145
+                    .setAction(R.string.settings) {
+                        // Displays App settings screen.
+                        startActivity(Intent().apply {
+                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                            data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        })
+                    }.show()
+            } else {
+                permissionsGranted = true
+                waitForLocation()
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun waitForLocation() {
+        if (checkSelfPermissions(permissions, context!!).isEmpty()) {
+            val location: Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            if (location != null) {
+                val longitude: Double = location.longitude
+                val latitude: Double = location.latitude
+                zoomMapToLocation(longitude, latitude)
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10f, locationListener)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        waitForLocation()
+    }
+
+    private fun zoomMapToLocation(longitude: Double, latitude: Double) {
+        locationManager.removeUpdates(locationListener)
+
+        if (::map.isInitialized && !hasCentered) { // If map was not initialized, this method will be called again by onMapReady
+            val latLng = LatLng(latitude, longitude)
+            val zoomLevel = 15f
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
+            hasCentered = true
+        }
     }
 
     private fun onLocationSelected() {
@@ -96,6 +190,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        if (permissionsGranted) {
+            waitForLocation()
+        }
     }
 
 
