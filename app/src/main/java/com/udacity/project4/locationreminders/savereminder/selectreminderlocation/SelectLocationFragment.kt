@@ -48,10 +48,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private val locationListener = LocationListener { location ->
-            val longitude = location.longitude
-            val latitude = location.latitude
-            zoomMapToLocation(longitude, latitude)
-        }
+        val longitude = location.longitude
+        val latitude = location.latitude
+        zoomMapToLocation(longitude, latitude)
+    }
 
     private var hasCentered = false
 
@@ -63,7 +63,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
 
@@ -73,7 +73,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         checkPermissions()
@@ -130,13 +131,21 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     private fun waitForLocation() {
         if (checkSelfPermissions(permissions, context!!).isEmpty()) {
-            val location: Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val location: Location? =
+                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             if (location != null) {
                 val longitude: Double = location.longitude
                 val latitude: Double = location.latitude
                 zoomMapToLocation(longitude, latitude)
             } else {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10f, locationListener)
+                val minTime = 5000L
+                val minDistance = 50f
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    minTime,
+                    minDistance,
+                    locationListener
+                )
             }
         }
     }
