@@ -29,11 +29,13 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
-class SelectLocationFragment : BaseFragment() {
+class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSelectLocationBinding
+
+    private lateinit var map: GoogleMap
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -47,6 +49,8 @@ class SelectLocationFragment : BaseFragment() {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
+        val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 //        TODO: add the map setup implementation
 //        TODO: zoom to the user location after taking his permission
 //        TODO: add style to the map
@@ -71,20 +75,27 @@ class SelectLocationFragment : BaseFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        // TODO: Change the map type based on the user's selection.
         R.id.normal_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_NORMAL
             true
         }
         R.id.hybrid_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_HYBRID
             true
         }
         R.id.satellite_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_SATELLITE
             true
         }
         R.id.terrain_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_TERRAIN
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
     }
 
 
