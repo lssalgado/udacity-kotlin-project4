@@ -5,6 +5,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -17,7 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
@@ -32,6 +33,7 @@ import timber.log.Timber
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
+    private lateinit var marker: Marker
     private val requestCode = 1010
 
     private val permissions = arrayOf(
@@ -155,10 +157,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         waitForLocation()
     }
 
+    @SuppressLint("MissingPermission")
     private fun zoomMapToLocation(longitude: Double, latitude: Double) {
         locationManager.removeUpdates(locationListener)
 
         if (::map.isInitialized && !hasCentered) { // If map was not initialized, this method will be called again by onMapReady
+            map.isMyLocationEnabled = true
             val latLng = LatLng(latitude, longitude)
             val zoomLevel = 15f
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
@@ -202,7 +206,40 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         if (permissionsGranted) {
             waitForLocation()
         }
+        setMapLongClick()
+        setMapStyle()
     }
 
+    private fun setMapLongClick() {
+        map.setOnMapLongClickListener { latLng ->
+            if (::marker.isInitialized) {
+                marker.remove()
+            }
+            val markerOptions = MarkerOptions().title(getString(R.string.content_text))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                .position(latLng).snippet(
+                    getString(
+                        R.string.lat_long_snippet,
+                        latLng.latitude,
+                        latLng.longitude
+                    )
+                )
+            marker = map.addMarker(
+                markerOptions
+            )
+        }
+    }
+
+    private fun setMapStyle() {
+        try {
+            val success =
+                map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style))
+            if (!success) {
+                Timber.e("Style parsing failed!!")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Timber.e(e, "Could not find style!")
+        }
+    }
 
 }
