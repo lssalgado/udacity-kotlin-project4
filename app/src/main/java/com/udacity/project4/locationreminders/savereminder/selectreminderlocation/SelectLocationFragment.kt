@@ -204,7 +204,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 val title = editText.text.toString()
                 _viewModel.onLocationStr(title)
                 addMarker(selectedLatLng, title)
-                enableSaveButton()
             }
 
         dialogBuilder.show()
@@ -246,6 +245,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
         setMapLongClick()
         setMapStyle()
+        setPoiClick()
         cachedLatLng?.let {
             addMarker(it, _viewModel.reminderSelectedLocationStr.value)
         }
@@ -255,6 +255,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         map.setOnMapLongClickListener { latLng ->
             selectedLatLng = latLng
             showTitleDialog()
+        }
+    }
+
+    private fun setPoiClick() {
+        map.setOnPoiClickListener { poi ->
+            _viewModel.onLocationStr(poi.name)
+            addMarker(poi.latLng, poi.name)
         }
     }
 
@@ -271,6 +278,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         marker = map.addMarker(
             markerOptions
         )
+        enableSaveButton()
     }
 
     private fun enableSaveButton() {
