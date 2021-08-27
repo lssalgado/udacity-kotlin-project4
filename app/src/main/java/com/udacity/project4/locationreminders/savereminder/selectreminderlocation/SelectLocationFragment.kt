@@ -62,6 +62,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private var hasCentered = false
+    private var cachedLatLng: LatLng? = null
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
@@ -98,11 +99,18 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 _viewModel.onLocationSelected(marker.position)
             }
         })
+
+        val lat = _viewModel.latitude.value
+        val lng = _viewModel.longitude.value
+        if (lat != null && lng != null) {
+            cachedLatLng = LatLng(lat, lng)
+        }
+
 //        TODO: call this function after the user confirms on the selected location
         binding.saveButton.setOnClickListener {
             saveButtonClick()
         }
-        //TODO Observe selectedLocation and open the map with a marker if there was one previously
+
         return binding.root
     }
 
@@ -236,6 +244,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
         setMapLongClick()
         setMapStyle()
+        cachedLatLng?.let {
+            addMarker(it)
+        }
     }
 
     private fun setMapLongClick() {
@@ -243,20 +254,24 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             if (::marker.isInitialized) {
                 marker.remove()
             }
-            val markerOptions = MarkerOptions().title(getString(R.string.content_text))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-                .position(latLng).snippet(
-                    getString(
-                        R.string.lat_long_snippet,
-                        latLng.latitude,
-                        latLng.longitude
-                    )
-                )
-            marker = map.addMarker(
-                markerOptions
-            )
+            addMarker(latLng)
             enableSaveButton()
         }
+    }
+
+    private fun addMarker(latLng: LatLng) {
+        val markerOptions = MarkerOptions().title(getString(R.string.content_text))
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+            .position(latLng).snippet(
+                getString(
+                    R.string.lat_long_snippet,
+                    latLng.latitude,
+                    latLng.longitude
+                )
+            )
+        marker = map.addMarker(
+            markerOptions
+        )
     }
 
     private fun enableSaveButton() {
