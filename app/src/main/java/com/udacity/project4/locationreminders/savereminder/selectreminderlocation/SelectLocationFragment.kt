@@ -4,6 +4,7 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Resources
 import android.location.Location
@@ -13,6 +14,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.*
+import android.widget.EditText
+import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -88,9 +92,15 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 findNavController().popBackStack()
             }
         })
+
+        _viewModel.reminderSelectedLocationStr.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                _viewModel.onLocationSelected(marker.position)
+            }
+        })
 //        TODO: call this function after the user confirms on the selected location
         binding.saveButton.setOnClickListener {
-            onLocationSelected()
+            saveButtonClick()
         }
         //TODO Observe selectedLocation and open the map with a marker if there was one previously
         return binding.root
@@ -176,8 +186,22 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun onLocationSelected() {
-        _viewModel.onLocationSelected(marker.position)
+    private fun saveButtonClick() {
+        val editText = EditText(context!!)
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        editText.layoutParams = layoutParams
+        val dialog = AlertDialog.Builder(context!!, R.style.Theme_AppCompat_DayNight_Dialog_Alert).setTitle(getString(R.string.location_name))
+            .setView(editText)
+            .setNegativeButton("Cancel") { _, _ ->
+                _viewModel.onLocationStr(null) }
+            .setPositiveButton("OK") { _, _ ->
+                _viewModel.onLocationStr(editText.text.toString())
+            }
+
+        dialog.show()
     }
 
 
