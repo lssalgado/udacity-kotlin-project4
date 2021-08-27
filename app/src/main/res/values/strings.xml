@@ -47,4 +47,9 @@
     <string name="location_icon">Location icon</string>
     <string name="alarm_icon">Alarm icon</string>
     <string name="please_sign">Please Sign in to enjoy the app</string>
+
+    <!-- Select Location -->
+    <string name="location_name">Location Name</string>
+    <string name="missing_location_permissions">Map won\'t be centered due to missing permissions!!</string>
+    <string name="please_select_location">Please select the location</string>
 </resources>

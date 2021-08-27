@@ -117,7 +117,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 Timber.e("The following permissions were not granted: ${missingPermissions.contentDeepToString()}")
                 Snackbar.make(
                     binding.root,
-                    "Map won't be centered due to missing permissions!!",
+                    getString(R.string.missing_location_permissions),
                     Snackbar.LENGTH_LONG
                 )
                     // Extracted from: https://github.com/udacity/android-kotlin-geo-fences/blob/master/app/src/main/java/com/example/android/treasureHunt/HuntMainActivity.kt#L145
@@ -231,7 +231,14 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             marker = map.addMarker(
                 markerOptions
             )
-            binding.saveButton.visibility = View.VISIBLE
+            enableSaveButton()
+        }
+    }
+
+    private fun enableSaveButton() {
+        if (!binding.saveButton.isEnabled) {
+            binding.saveButton.text = getString(R.string.save)
+            binding.saveButton.isEnabled = true
         }
     }
 
