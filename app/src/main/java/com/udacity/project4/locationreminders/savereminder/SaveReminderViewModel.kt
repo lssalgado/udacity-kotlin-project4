@@ -1,7 +1,6 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
@@ -12,6 +11,7 @@ import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
+import com.udacity.project4.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
@@ -23,9 +23,8 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
 
-    private val _selectedLocation = MutableLiveData<Boolean>()
-    val selectedLocation: LiveData<Boolean>
-        get() = _selectedLocation
+    val selectedLocation = SingleLiveEvent<Boolean>()
+    val dialogResult = SingleLiveEvent<Boolean>()
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
@@ -89,10 +88,13 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     fun onLocationSelected(latLng: LatLng) {
         latitude.value = latLng.latitude
         longitude.value = latLng.longitude
-        _selectedLocation.value = true
+        selectedLocation.value = true
     }
 
     fun onLocationStr(str: String?) {
-        reminderSelectedLocationStr.value = str
+        str?.let {
+            reminderSelectedLocationStr.value = str
+            dialogResult.value = true
+        }
     }
 }

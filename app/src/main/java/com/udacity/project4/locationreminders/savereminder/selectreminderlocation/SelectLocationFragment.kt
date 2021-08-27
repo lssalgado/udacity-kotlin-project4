@@ -88,13 +88,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         checkPermissions()
 
         _viewModel.selectedLocation.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            if (it != null && it) {
                 findNavController().popBackStack()
             }
         })
 
-        _viewModel.reminderSelectedLocationStr.observe(viewLifecycleOwner, Observer {
-            it?.let {
+        _viewModel.dialogResult.observe(viewLifecycleOwner, Observer {
+            if (it != null && it) {
                 _viewModel.onLocationSelected(marker.position)
             }
         })
