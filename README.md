@@ -49,7 +49,7 @@ Explain what each test does and why
 - [x] Create a Login screen to ask users to login using an email address or a Google account.  Upon successful login, navigate the user to the Reminders screen.   If there is no account, the app should navigate to a Register screen.
 - [x] Create a Register screen to allow a user to register using an email address or a Google account.
 - [ ] Create a screen that displays the reminders retrieved from local storage. If there are no reminders, display a   "No Data"  indicator.  If there are any errors, display an error message.
-- [ ] Create a screen that shows a map with the user's current location and asks the user to select a point of interest to create a reminder.
+- [x] Create a screen that shows a map with the user's current location and asks the user to select a point of interest to create a reminder.
 - [ ] Create a screen to add a reminder when a user reaches the selected location.  Each reminder should include
     - [ ] title
     - [ ] description
