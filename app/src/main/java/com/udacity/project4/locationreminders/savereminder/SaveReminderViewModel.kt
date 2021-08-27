@@ -24,7 +24,6 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val longitude = MutableLiveData<Double>()
 
     val selectedLocation = SingleLiveEvent<Boolean>()
-    val dialogResult = SingleLiveEvent<Boolean>()
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
@@ -91,10 +90,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         selectedLocation.value = true
     }
 
-    fun onLocationStr(str: String?) {
-        str?.let {
-            reminderSelectedLocationStr.value = str
-            dialogResult.value = true
-        }
+    fun onLocationStr(str: String) {
+        reminderSelectedLocationStr.value = str
     }
 }

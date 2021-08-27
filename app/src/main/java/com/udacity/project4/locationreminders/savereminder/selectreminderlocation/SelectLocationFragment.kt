@@ -4,7 +4,6 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Resources
 import android.location.Location
@@ -63,6 +62,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private var hasCentered = false
     private var cachedLatLng: LatLng? = null
+    private lateinit var selectedLatLng: LatLng
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
@@ -91,12 +91,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         _viewModel.selectedLocation.observe(viewLifecycleOwner, Observer {
             if (it != null && it) {
                 findNavController().popBackStack()
-            }
-        })
-
-        _viewModel.dialogResult.observe(viewLifecycleOwner, Observer {
-            if (it != null && it) {
-                _viewModel.onLocationSelected(marker.position)
             }
         })
 
@@ -194,22 +188,30 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun saveButtonClick() {
+    private fun showTitleDialog() {
         val editText = EditText(context!!)
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.MATCH_PARENT
         )
         editText.layoutParams = layoutParams
-        val dialog = AlertDialog.Builder(context!!, R.style.Theme_AppCompat_DayNight_Dialog_Alert).setTitle(getString(R.string.location_name))
+        val dialogBuilder = AlertDialog.Builder(context!!, R.style.Theme_AppCompat_DayNight_Dialog_Alert).setTitle(getString(R.string.location_name))
             .setView(editText)
-            .setNegativeButton("Cancel") { _, _ ->
-                _viewModel.onLocationStr(null) }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
             .setPositiveButton("OK") { _, _ ->
-                _viewModel.onLocationStr(editText.text.toString())
+                val title = editText.text.toString()
+                _viewModel.onLocationStr(title)
+                addMarker(selectedLatLng, title)
+                enableSaveButton()
             }
 
-        dialog.show()
+        dialogBuilder.show()
+    }
+
+    private fun saveButtonClick() {
+        _viewModel.onLocationSelected(marker.position)
     }
 
 
@@ -245,30 +247,27 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setMapLongClick()
         setMapStyle()
         cachedLatLng?.let {
-            addMarker(it)
+            addMarker(it, _viewModel.reminderSelectedLocationStr.value)
         }
     }
 
     private fun setMapLongClick() {
         map.setOnMapLongClickListener { latLng ->
-            if (::marker.isInitialized) {
-                marker.remove()
-            }
-            addMarker(latLng)
-            enableSaveButton()
+            selectedLatLng = latLng
+            showTitleDialog()
         }
     }
 
-    private fun addMarker(latLng: LatLng) {
-        val markerOptions = MarkerOptions().title(getString(R.string.content_text))
+    private fun addMarker(latLng: LatLng, title: String?) {
+        if (::marker.isInitialized) {
+            marker.remove()
+        }
+        val markerOptions = MarkerOptions()
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-            .position(latLng).snippet(
-                getString(
-                    R.string.lat_long_snippet,
-                    latLng.latitude,
-                    latLng.longitude
-                )
-            )
+            .position(latLng)
+        title?.let {
+            markerOptions.title(it)
+        }
         marker = map.addMarker(
             markerOptions
         )
