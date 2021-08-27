@@ -14,6 +14,8 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.*
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -80,13 +82,17 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         checkPermissions()
-//        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
 
-
+        _viewModel.selectedLocation.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                findNavController().popBackStack()
+            }
+        })
 //        TODO: call this function after the user confirms on the selected location
-        onLocationSelected()
-
+        binding.saveButton.setOnClickListener {
+            onLocationSelected()
+        }
+        //TODO Observe selectedLocation and open the map with a marker if there was one previously
         return binding.root
     }
 
@@ -171,9 +177,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
+        _viewModel.onLocationSelected(marker.position)
     }
 
 
