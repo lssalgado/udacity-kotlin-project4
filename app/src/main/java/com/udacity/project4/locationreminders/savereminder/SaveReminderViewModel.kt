@@ -16,24 +16,12 @@ import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
     BaseViewModel(app) {
-    private val _reminderTitle = MutableLiveData<String>()
-    val reminderTitle: LiveData<String>
-        get() = _reminderTitle
-    private val _reminderDescription = MutableLiveData<String>()
-    val reminderDescription: LiveData<String>
-        get() = _reminderDescription
-    private val _reminderSelectedLocationStr = MutableLiveData<String>()
-    val reminderSelectedLocationStr: LiveData<String>
-        get() = _reminderSelectedLocationStr
-    private val _selectedPOI = MutableLiveData<PointOfInterest>()
-    val selectedPOI: LiveData<PointOfInterest>
-        get() = _selectedPOI
-    private val _latitude = MutableLiveData<Double>()
-    val latitude: LiveData<Double>
-        get() = _latitude
-    private val _longitude = MutableLiveData<Double>()
-    val longitude: LiveData<Double>
-        get() = _longitude
+    val reminderTitle = MutableLiveData<String>()
+    val reminderDescription = MutableLiveData<String>()
+    val reminderSelectedLocationStr = MutableLiveData<String>()
+    val selectedPOI = MutableLiveData<PointOfInterest>()
+    val latitude = MutableLiveData<Double>()
+    val longitude = MutableLiveData<Double>()
 
     private val _selectedLocation = MutableLiveData<Boolean>()
     val selectedLocation: LiveData<Boolean>
@@ -43,12 +31,12 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
      * Clear the live data objects to start fresh next time the view model gets called
      */
     fun onClear() {
-        _reminderTitle.value = null
-        _reminderDescription.value = null
-        _reminderSelectedLocationStr.value = null
-        _selectedPOI.value = null
-        _latitude.value = null
-        _longitude.value = null
+        reminderTitle.value = null
+        reminderDescription.value = null
+        reminderSelectedLocationStr.value = null
+        selectedPOI.value = null
+        latitude.value = null
+        longitude.value = null
     }
 
     /**
@@ -99,8 +87,12 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     }
 
     fun onLocationSelected(latLng: LatLng) {
-        _latitude.value = latLng.latitude
-        _longitude.value = latLng.longitude
+        latitude.value = latLng.latitude
+        longitude.value = latLng.longitude
         _selectedLocation.value = true
+    }
+
+    fun onLocationStr(str: String?) {
+        reminderSelectedLocationStr.value = str
     }
 }
