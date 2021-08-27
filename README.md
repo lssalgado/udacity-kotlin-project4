@@ -64,23 +64,23 @@ Explain what each test does and why
     - [ ] Add End-To-End testing for the Fragments navigation.
 
 ## Rubric
-- [ ] **User Authentication**
-  - [ ] Create Login and Registration screens
-    - [ ] Login screen allows users to login using email or a Google Account
-    - [ ] If the user does not exist, the app navigates to a Registration screen
-  - [ ] Enable user accounts using Firebase Authentication and Firebase UI.
-    - [ ] The project includes a FirebaseUI dependency
-    - [ ] Authentication is enabled through the Firebase console.
+- [x] **User Authentication**
+  - [x] Create Login and Registration screens
+    - [x] Login screen allows users to login using email or a Google Account
+    - [x] If the user does not exist, the app navigates to a Registration screen
+  - [x] Enable user accounts using Firebase Authentication and Firebase UI.
+    - [x] The project includes a FirebaseUI dependency
+    - [x] Authentication is enabled through the Firebase console.
 - [ ] **Map View**
-  - [ ] Create a Map view that shows the user's current location
-    - [ ] A screen that shows a map and asks the user to allow the location permission to show his location on the map.
-    - [ ] The app works on all the different Android versions including Android Q.
+  - [x] Create a Map view that shows the user's current location
+    - [x] A screen that shows a map and asks the user to allow the location permission to show his location on the map.
+    - [x] The app works on all the different Android versions including Android Q.
   - [ ] Add functionality to allow the user to select POIs to set reminders
-    - [ ] The app asks the user to select a location or POI on the map and add a new marker at that location. Upon saving, the selected location is returned to the Save Reminder page and the user is asked to input the title and description for the reminder.
+    - [x] The app asks the user to select a location or POI on the map and add a new marker at that location. Upon saving, the selected location is returned to the Save Reminder page and the user is asked to input the title and description for the reminder.
     - [ ] When the reminder is saved, a geofencing request is created.
-  - [ ] Style the map
-    - [ ] Map Styling has been updated using the map styling wizard to generate a nice looking map.
-    - [ ] Users have the option to change map type.
+  - [x] Style the map
+    - [x] Map Styling has been updated using the map styling wizard to generate a nice looking map.
+    - [x] Users have the option to change map type.
   - [ ] Display a notification when a selected POI is reached
     - [ ] When the user enters a geofence, a reminder is retrieved from the local storage and a notification showing the reminder title will appear, even if the app is not open.
 - [ ] **Reminders**
