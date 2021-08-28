@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
@@ -72,6 +74,10 @@ class SaveReminderFragment : BaseFragment() {
 
         binding.viewModel = _viewModel
 
+        _viewModel.showSnackBarInt.observe(viewLifecycleOwner, Observer {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+        })
+
         return binding.root
     }
 
@@ -85,7 +91,7 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         binding.saveReminder.setOnClickListener {
-            saveReminderToDB()
+            checkPermissionsAndAddGeofence()
         }
     }
 
@@ -102,7 +108,7 @@ class SaveReminderFragment : BaseFragment() {
         }
     }
 
-    private fun saveReminderToDB() {
+    private fun checkPermissionsAndAddGeofence() {
         val title = _viewModel.reminderTitle.value
         val description = _viewModel.reminderDescription.value
         val location = _viewModel.reminderSelectedLocationStr.value
@@ -110,12 +116,14 @@ class SaveReminderFragment : BaseFragment() {
         val longitude = _viewModel.longitude.value
 
         reminder = ReminderDataItem(title, description, location, latitude, longitude)
-        val missingPermissions = checkSelfPermissions(permissions, context!!)
+        if (_viewModel.validateEnteredData(reminder)) {
+            val missingPermissions = checkSelfPermissions(permissions, context!!)
 
-        if (missingPermissions.isEmpty()) {
-            addGeofence(reminder)
-        } else {
-            requestPermissions(missingPermissions, requestCode)
+            if (missingPermissions.isEmpty()) {
+                addGeofence(reminder)
+            } else {
+                requestPermissions(missingPermissions, requestCode)
+            }
         }
     }
 
@@ -146,7 +154,7 @@ class SaveReminderFragment : BaseFragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     Timber.e("Add Geofence ${geofence.requestId} lat:${latitude}, lng:${longitude}")
-                    _viewModel.saveReminder(reminder)
+                    _viewModel.validateAndSaveReminder(reminder)
                 }
                 addOnFailureListener {
                     Toast.makeText(
