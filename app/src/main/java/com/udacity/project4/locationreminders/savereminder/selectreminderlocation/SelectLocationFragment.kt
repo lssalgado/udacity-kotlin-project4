@@ -31,6 +31,7 @@ import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.checkSelfPermissions
+import com.udacity.project4.utils.onPermissionResult
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -124,24 +125,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == this.requestCode) {
-            val missingPermissions = checkSelfPermissions(this.permissions, context!!)
-            if (missingPermissions.isNotEmpty()) {
-                Timber.e("The following permissions were not granted: ${missingPermissions.contentDeepToString()}")
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.missing_location_permissions),
-                    Snackbar.LENGTH_LONG
-                )
-                    // Extracted from: https://github.com/udacity/android-kotlin-geo-fences/blob/master/app/src/main/java/com/example/android/treasureHunt/HuntMainActivity.kt#L145
-                    .setAction(R.string.settings) {
-                        // Displays App settings screen.
-                        startActivity(Intent().apply {
-                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        })
-                    }.show()
-            } else {
+            onPermissionResult(this.permissions, binding.root) {
                 permissionsGranted = true
                 waitForLocation()
             }
