@@ -48,13 +48,13 @@ Explain what each test does and why
 ## Project Instructions
 - [x] Create a Login screen to ask users to login using an email address or a Google account.  Upon successful login, navigate the user to the Reminders screen.   If there is no account, the app should navigate to a Register screen.
 - [x] Create a Register screen to allow a user to register using an email address or a Google account.
-- [ ] Create a screen that displays the reminders retrieved from local storage. If there are no reminders, display a   "No Data"  indicator.  If there are any errors, display an error message.
+- [x] Create a screen that displays the reminders retrieved from local storage. If there are no reminders, display a   "No Data"  indicator.  If there are any errors, display an error message.
 - [x] Create a screen that shows a map with the user's current location and asks the user to select a point of interest to create a reminder.
-- [ ] Create a screen to add a reminder when a user reaches the selected location.  Each reminder should include
-    - [ ] title
-    - [ ] description
-    - [ ] selected location
-- [ ] Reminder data should be saved to local storage.
+- [x] Create a screen to add a reminder when a user reaches the selected location.  Each reminder should include
+    - [x] title
+    - [x] description
+    - [x] selected location
+- [x] Reminder data should be saved to local storage.
 - [ ] For each reminder, create a geofencing request in the background that fires up a notification when the user enters the geofencing area.
 - [ ] Provide testing for the ViewModels, Coroutines and LiveData objects.
 - [ ] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
@@ -75,9 +75,9 @@ Explain what each test does and why
   - [x] Create a Map view that shows the user's current location
     - [x] A screen that shows a map and asks the user to allow the location permission to show his location on the map.
     - [x] The app works on all the different Android versions including Android Q.
-  - [ ] Add functionality to allow the user to select POIs to set reminders
+  - [x] Add functionality to allow the user to select POIs to set reminders
     - [x] The app asks the user to select a location or POI on the map and add a new marker at that location. Upon saving, the selected location is returned to the Save Reminder page and the user is asked to input the title and description for the reminder.
-    - [ ] When the reminder is saved, a geofencing request is created.
+    - [x] When the reminder is saved, a geofencing request is created.
   - [x] Style the map
     - [x] Map Styling has been updated using the map styling wizard to generate a nice looking map.
     - [x] Users have the option to change map type.
@@ -85,9 +85,9 @@ Explain what each test does and why
     - [ ] When the user enters a geofence, a reminder is retrieved from the local storage and a notification showing the reminder title will appear, even if the app is not open.
 - [ ] **Reminders**
   - [ ] Add a screen to create reminders
-    - [ ] Reminder data includes title and description.
-    - [ ] The user-entered data will be captured using live data and data binding.
-    - [ ] RemindersLocalRepository is used to save the reminder to the local DB. And the geofencing request will be created after confirmation.
+    - [x] Reminder data includes title and description.
+    - [x] The user-entered data will be captured using live data and data binding.
+    - [x] RemindersLocalRepository is used to save the reminder to the local DB. And the geofencing request will be created after confirmation.
   - [ ] Add a list view that displays the reminders
     - [ ] All reminders in the location DB is displayed
     - [ ] If the location DB is empty, a no data indicator is displayed.
