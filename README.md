@@ -71,7 +71,7 @@ Explain what each test does and why
   - [x] Enable user accounts using Firebase Authentication and Firebase UI.
     - [x] The project includes a FirebaseUI dependency
     - [x] Authentication is enabled through the Firebase console.
-- [ ] **Map View**
+- [x] **Map View**
   - [x] Create a Map view that shows the user's current location
     - [x] A screen that shows a map and asks the user to allow the location permission to show his location on the map.
     - [x] The app works on all the different Android versions including Android Q.
@@ -81,17 +81,17 @@ Explain what each test does and why
   - [x] Style the map
     - [x] Map Styling has been updated using the map styling wizard to generate a nice looking map.
     - [x] Users have the option to change map type.
-  - [ ] Display a notification when a selected POI is reached
-    - [ ] When the user enters a geofence, a reminder is retrieved from the local storage and a notification showing the reminder title will appear, even if the app is not open.
+  - [x] Display a notification when a selected POI is reached
+    - [x] When the user enters a geofence, a reminder is retrieved from the local storage and a notification showing the reminder title will appear, even if the app is not open.
 - [ ] **Reminders**
-  - [ ] Add a screen to create reminders
+  - [x] Add a screen to create reminders
     - [x] Reminder data includes title and description.
     - [x] The user-entered data will be captured using live data and data binding.
     - [x] RemindersLocalRepository is used to save the reminder to the local DB. And the geofencing request will be created after confirmation.
-  - [ ] Add a list view that displays the reminders
-    - [ ] All reminders in the location DB is displayed
-    - [ ] If the location DB is empty, a no data indicator is displayed.
-    - [ ] User can navigate from this screen to another screen to create a new reminder.
+  - [x] Add a list view that displays the reminders
+    - [x] All reminders in the location DB is displayed
+    - [x] If the location DB is empty, a no data indicator is displayed.
+    - [x] User can navigate from this screen to another screen to create a new reminder.
   - [ ] Display details about a reminder when a selected POI is reached and the user clicked on the notification.
     - [ ] When the user clicks a notification, when he clicks on it, a new screen appears to display the reminder details.
 - [ ] **Testing**
