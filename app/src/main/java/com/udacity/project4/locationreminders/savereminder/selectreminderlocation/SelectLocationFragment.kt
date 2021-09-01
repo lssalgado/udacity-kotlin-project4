@@ -33,6 +33,7 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.checkSelfPermissions
 import com.udacity.project4.utils.onPermissionResult
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
+import com.udacity.project4.utils.setMapStyle
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -228,7 +229,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             waitForLocation()
         }
         setMapLongClick()
-        setMapStyle()
+        map.setMapStyle(context!!)
         setPoiClick()
         cachedLatLng?.let {
             addMarker(it, _viewModel.reminderSelectedLocationStr.value)
@@ -269,18 +270,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         if (!binding.saveButton.isEnabled) {
             binding.saveButton.text = getString(R.string.save)
             binding.saveButton.isEnabled = true
-        }
-    }
-
-    private fun setMapStyle() {
-        try {
-            val success =
-                map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style))
-            if (!success) {
-                Timber.e("Style parsing failed!!")
-            }
-        } catch (e: Resources.NotFoundException) {
-            Timber.e(e, "Could not find style!")
         }
     }
 
