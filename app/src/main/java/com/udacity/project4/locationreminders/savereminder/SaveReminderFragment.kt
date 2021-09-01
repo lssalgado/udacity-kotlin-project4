@@ -44,7 +44,7 @@ class SaveReminderFragment : BaseFragment() {
         PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    private val geofenceRadius = 1000f
+    private val geofenceRadius = 100f
 
     private val permissions: Array<String> = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
         arrayOf(
