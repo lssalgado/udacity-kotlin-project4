@@ -3,7 +3,9 @@ package com.udacity.project4.locationreminders.geofence
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 import com.udacity.project4.locationreminders.savereminder.SaveReminderFragment.Companion.GEOFENCE_EVENT
 import timber.log.Timber
@@ -24,7 +26,12 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             val geofencingEvent = GeofencingEvent.fromIntent(intent)
             Timber.e("Broadcast received!!!!!!!!")
 
-            Timber.e("Error code: ${geofencingEvent.errorCode}")
+            if (geofencingEvent.hasError()) {
+                val errorMessage =
+                    GeofenceStatusCodes.getStatusCodeString(geofencingEvent.errorCode)
+                Timber.e("Error code: ${geofencingEvent.errorCode} '$errorMessage'")
+                return
+            }
 
             when (geofencingEvent.geofenceTransition) {
                 Geofence.GEOFENCE_TRANSITION_ENTER -> Timber.e("Transition = Enter")
@@ -36,8 +43,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 Timber.e("Geofence ID: ${it.requestId}")
             }
 
-            Timber.e(" Latitude: ${ geofencingEvent.triggeringLocation.latitude }")
-            Timber.e(" Longitude: ${ geofencingEvent.triggeringLocation.longitude }")
+            Timber.e(" Latitude: ${geofencingEvent.triggeringLocation.latitude}")
+            Timber.e(" Longitude: ${geofencingEvent.triggeringLocation.longitude}")
 
             GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
         }
