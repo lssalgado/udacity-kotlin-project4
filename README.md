@@ -83,7 +83,7 @@ Explain what each test does and why
     - [x] Users have the option to change map type.
   - [x] Display a notification when a selected POI is reached
     - [x] When the user enters a geofence, a reminder is retrieved from the local storage and a notification showing the reminder title will appear, even if the app is not open.
-- [ ] **Reminders**
+- [x] **Reminders**
   - [x] Add a screen to create reminders
     - [x] Reminder data includes title and description.
     - [x] The user-entered data will be captured using live data and data binding.
@@ -92,8 +92,8 @@ Explain what each test does and why
     - [x] All reminders in the location DB is displayed
     - [x] If the location DB is empty, a no data indicator is displayed.
     - [x] User can navigate from this screen to another screen to create a new reminder.
-  - [ ] Display details about a reminder when a selected POI is reached and the user clicked on the notification.
-    - [ ] When the user clicks a notification, when he clicks on it, a new screen appears to display the reminder details.
+  - [x] Display details about a reminder when a selected POI is reached and the user clicked on the notification.
+    - [x] When the user clicks a notification, when he clicks on it, a new screen appears to display the reminder details.
 - [ ] **Testing**
   - [ ] Use MVVM and Dependency Injection to architect your app.
     - [ ] The app follows the MVVM design pattern and uses ViewModels to hold the live data objects, do the validation and interact with the data sources.
