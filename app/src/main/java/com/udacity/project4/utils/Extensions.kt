@@ -3,6 +3,7 @@ package com.udacity.project4.utils
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.util.Log
 import android.view.View
@@ -11,10 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.udacity.project4.R
 import com.udacity.project4.base.BaseRecyclerViewAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -65,4 +70,16 @@ fun View.fadeOut() {
             this@fadeOut.visibility = View.GONE
         }
     })
+}
+
+fun GoogleMap.setMapStyle(context: Context) {
+    try {
+        val success =
+            setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style))
+        if (!success) {
+            Timber.e("Style parsing failed!!")
+        }
+    } catch (e: Resources.NotFoundException) {
+        Timber.e(e, "Could not find style!")
+    }
 }

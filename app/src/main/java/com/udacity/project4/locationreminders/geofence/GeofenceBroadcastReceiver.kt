@@ -38,6 +38,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
             Timber.e(" Latitude: ${ geofencingEvent.triggeringLocation.latitude }")
             Timber.e(" Longitude: ${ geofencingEvent.triggeringLocation.longitude }")
+
+            GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
         }
 //TODO: implement the onReceive method to receive the geofencing events at the background
 
