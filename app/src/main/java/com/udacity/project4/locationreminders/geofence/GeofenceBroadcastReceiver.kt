@@ -41,7 +41,6 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
             GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
         }
-//TODO: implement the onReceive method to receive the geofencing events at the background
 
     }
 }

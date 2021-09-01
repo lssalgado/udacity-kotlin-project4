@@ -50,9 +50,6 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
             Geofence.GEOFENCE_TRANSITION_DWELL -> Timber.e("Transition = Dwell")
             Geofence.GEOFENCE_TRANSITION_EXIT -> Timber.e("Transition = Exit")
         }
-        //TODO: handle the geofencing transition events and
-        // send a notification to the user when he enters the geofence area
-        //TODO call @sendNotification
     }
 
     //TODO: get the request id of the current geofence

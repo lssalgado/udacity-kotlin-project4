@@ -70,7 +70,6 @@ class ReminderDescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.backButton.setOnClickListener {
             RemindersActivity.start(this)
         }
-//        TODO: Add the implementation of the reminder details
     }
 
     private fun handleError() {
