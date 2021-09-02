@@ -76,12 +76,31 @@ class RemindersListViewModelTest {
     }
 
     @Test
-    fun loadReminders_remindersContent() {
+    fun loadReminders_reminders() {
         viewModel.loadReminders()
 
         val remindersList = viewModel.remindersList.getOrAwaitValue()
         Assert.assertThat(remindersList, CoreMatchers.notNullValue())
         Assert.assertThat(remindersList.size, CoreMatchers.`is`(3))
+    }
+
+    @Test
+    fun loadReminders_showSnackBar() {
+        dataSource.isToReturnError()
+
+        mainCoroutineRule.pauseDispatcher()
+        viewModel.loadReminders()
+
+        Assert.assertThat(
+            viewModel.showSnackBar.value,
+            CoreMatchers.nullValue() // Initial value
+        )
+
+        mainCoroutineRule.resumeDispatcher()
+        Assert.assertThat(
+            viewModel.showSnackBar.getOrAwaitValue().length,
+            CoreMatchers.not(0)
+        )
     }
 
 }
