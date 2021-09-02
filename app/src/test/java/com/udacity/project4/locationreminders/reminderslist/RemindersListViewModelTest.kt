@@ -75,4 +75,13 @@ class RemindersListViewModelTest {
         )
     }
 
+    @Test
+    fun loadReminders_remindersContent() {
+        viewModel.loadReminders()
+
+        val remindersList = viewModel.remindersList.getOrAwaitValue()
+        Assert.assertThat(remindersList, CoreMatchers.notNullValue())
+        Assert.assertThat(remindersList.size, CoreMatchers.`is`(3))
+    }
+
 }
