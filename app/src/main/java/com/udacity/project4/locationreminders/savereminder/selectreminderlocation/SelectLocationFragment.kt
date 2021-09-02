@@ -102,7 +102,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             cachedLatLng = LatLng(lat, lng)
         }
 
-//        TODO: call this function after the user confirms on the selected location
         binding.saveButton.setOnClickListener {
             saveButtonClick()
         }

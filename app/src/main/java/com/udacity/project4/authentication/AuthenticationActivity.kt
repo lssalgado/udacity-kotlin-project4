@@ -1,5 +1,7 @@
 package com.udacity.project4.authentication
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -59,5 +61,13 @@ class AuthenticationActivity : AppCompatActivity() {
                 .setAuthMethodPickerLayout(customLayout)
                 .build(), SIGN_IN_RESULT_CODE
         )
+    }
+
+    companion object {
+        fun start(activity: Activity) {
+            val intent = Intent(activity, AuthenticationActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            activity.startActivity(intent)
+        }
     }
 }
