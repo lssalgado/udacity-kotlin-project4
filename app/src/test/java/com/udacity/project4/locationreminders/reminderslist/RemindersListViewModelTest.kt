@@ -34,6 +34,11 @@ class RemindersListViewModelTest {
         viewModel = RemindersListViewModel(ApplicationProvider.getApplicationContext(), dataSource)
     }
 
+    @After
+    fun tearDown() {
+        stopKoin()
+    }
+
     @Test
     fun loadReminders_loading() {
         mainCoroutineRule.pauseDispatcher()
