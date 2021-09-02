@@ -43,4 +43,8 @@ class FakeDataSource : ReminderDataSource {
             this.reminders[reminder.id] = reminder
         }
     }
+
+    fun isToReturnError() {
+        shouldReturnError = true
+    }
 }

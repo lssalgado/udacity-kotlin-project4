@@ -8,11 +8,9 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
@@ -27,8 +25,6 @@ class RemindersListViewModelTest {
 
     @Before
     fun setUp() {
-        // Given a fresh ViewModel
-        //  tasksViewModel = TasksViewModel(ApplicationProvider.getApplicationContext())
         dataSource = FakeDataSource()
         val reminder1 = ReminderDTO("Title1", "Description1", "Location1", 100.0, 100.0)
         val reminder2 = ReminderDTO("Title2", "Description2", "Location2", 200.0, 200.0)
@@ -52,6 +48,25 @@ class RemindersListViewModelTest {
         Assert.assertThat(
             viewModel.showLoading.getOrAwaitValue(),
             CoreMatchers.`is`(false)
+        )
+    }
+
+    @Test
+    fun loadReminders_showNoData() {
+        dataSource.isToReturnError()
+
+        mainCoroutineRule.pauseDispatcher()
+        viewModel.loadReminders()
+
+        Assert.assertThat(
+            viewModel.showNoData.value,
+            CoreMatchers.nullValue() // Initial value
+        )
+
+        mainCoroutineRule.resumeDispatcher()
+        Assert.assertThat(
+            viewModel.showNoData.getOrAwaitValue(),
+            CoreMatchers.`is`(true)
         )
     }
 
