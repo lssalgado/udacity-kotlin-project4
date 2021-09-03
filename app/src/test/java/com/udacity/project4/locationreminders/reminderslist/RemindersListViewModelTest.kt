@@ -8,6 +8,7 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.*
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
@@ -44,13 +45,13 @@ class RemindersListViewModelTest {
         mainCoroutineRule.pauseDispatcher()
         viewModel.loadReminders()
 
-        Assert.assertThat(
+        assertThat(
             viewModel.showLoading.getOrAwaitValue(),
             CoreMatchers.`is`(true)
         )
 
         mainCoroutineRule.resumeDispatcher()
-        Assert.assertThat(
+        assertThat(
             viewModel.showLoading.getOrAwaitValue(),
             CoreMatchers.`is`(false)
         )
@@ -63,13 +64,13 @@ class RemindersListViewModelTest {
         mainCoroutineRule.pauseDispatcher()
         viewModel.loadReminders()
 
-        Assert.assertThat(
+        assertThat(
             viewModel.showNoData.value,
             CoreMatchers.nullValue() // Initial value
         )
 
         mainCoroutineRule.resumeDispatcher()
-        Assert.assertThat(
+        assertThat(
             viewModel.showNoData.getOrAwaitValue(),
             CoreMatchers.`is`(true)
         )
@@ -80,8 +81,8 @@ class RemindersListViewModelTest {
         viewModel.loadReminders()
 
         val remindersList = viewModel.remindersList.getOrAwaitValue()
-        Assert.assertThat(remindersList, CoreMatchers.notNullValue())
-        Assert.assertThat(remindersList.size, CoreMatchers.`is`(3))
+        assertThat(remindersList, CoreMatchers.notNullValue())
+        assertThat(remindersList.size, CoreMatchers.`is`(3))
     }
 
     @Test
@@ -91,13 +92,13 @@ class RemindersListViewModelTest {
         mainCoroutineRule.pauseDispatcher()
         viewModel.loadReminders()
 
-        Assert.assertThat(
+        assertThat(
             viewModel.showSnackBar.value,
             CoreMatchers.nullValue() // Initial value
         )
 
         mainCoroutineRule.resumeDispatcher()
-        Assert.assertThat(
+        assertThat(
             viewModel.showSnackBar.getOrAwaitValue().length,
             CoreMatchers.not(0)
         )
