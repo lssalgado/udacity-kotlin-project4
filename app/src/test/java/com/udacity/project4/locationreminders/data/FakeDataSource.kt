@@ -8,8 +8,6 @@ import java.util.LinkedHashMap
 //Use FakeDataSource that acts as a test double to the LocalDataSource
 class FakeDataSource : ReminderDataSource {
 
-//    TODO: Create a fake data source to act as a double to the real data source
-
     var reminders: LinkedHashMap<String, ReminderDTO> = LinkedHashMap()
     private var shouldReturnError = false
 
