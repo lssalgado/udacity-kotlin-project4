@@ -54,7 +54,7 @@ class SaveReminderViewModelTest {
         viewModel.onLocationSelected(LatLng(0.0, 0.0))
 
         val value = viewModel.selectedLocation.getOrAwaitValue()
-        assertThat(value, (CoreMatchers.not(nullValue())))
+        assertThat(value, (not(nullValue())))
     }
 
     @Test
@@ -62,7 +62,7 @@ class SaveReminderViewModelTest {
         viewModel.onLocationStr("Location Name")
 
         val value = viewModel.reminderSelectedLocationStr.getOrAwaitValue()
-        assertThat(value, (CoreMatchers.not(nullValue())))
+        assertThat(value, (not(nullValue())))
     }
 
     @Test

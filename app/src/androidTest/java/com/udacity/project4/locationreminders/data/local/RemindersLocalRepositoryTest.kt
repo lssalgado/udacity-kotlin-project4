@@ -44,7 +44,6 @@ class RemindersLocalRepositoryTest {
     @After
     fun tearDown() {
         database.close()
-        stopKoin()
     }
 
     @Test
