@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
@@ -109,5 +110,23 @@ class RemindersLocalRepositoryTest {
                 Assert.fail("No reminder was found with the given ID!!")
             }
         }
+    }
+
+    @Test
+    fun getReminderWithEmptyDBAndReturnNull() = runBlocking {
+        val result = remindersLocalRepository.getReminder("100")
+
+        assertThat(result, instanceOf(Result.Error::class.java))
+        result as Result.Error
+        assertThat(result.message, `is`("Reminder not found!"))
+    }
+
+    @Test
+    fun getRemindersWithEmptyDBAndReturnEmptyList() = runBlocking {
+        val result = remindersLocalRepository.getReminders()
+
+        assertThat(result, instanceOf(Result.Success::class.java))
+        result as Result.Success
+        assertThat(result.data.size, `is`(0))
     }
 }

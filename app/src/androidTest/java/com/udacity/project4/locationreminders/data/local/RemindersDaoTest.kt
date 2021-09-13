@@ -11,8 +11,10 @@ import com.udacity.project4.util.compareReminders
 import org.junit.runner.RunWith;
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi;
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.*
 
@@ -96,5 +98,19 @@ class RemindersDaoTest {
                 Assert.fail("No reminder was found with the given ID!!")
             }
         }
+    }
+
+    @Test
+    fun getReminderWithEmptyDBAndReturnNull() = runBlocking {
+        val dbReminder = database.reminderDao().getReminderById("100")
+
+        assertThat(dbReminder, nullValue())
+    }
+
+    @Test
+    fun getRemindersWithEmptyDBAndReturnEmptyList() = runBlocking {
+        val dbReminders = database.reminderDao().getReminders()
+
+        assertThat(dbReminders.size, `is`(0))
     }
 }
