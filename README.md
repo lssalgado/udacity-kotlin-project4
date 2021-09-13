@@ -6,6 +6,8 @@ A Todo list app with location reminders that remind the user to do something whe
 
 1. Clone the project to your local machine.
 2. Open the project using Android Studio.
+3. Add a variable with name MAPS_API_KEY and your Google Maps API Key as the value in local.properties!!  
+  3.1 `MAPS_API_KEY=<your key>`
 
 ### Dependencies
 
@@ -27,23 +29,8 @@ Step by step explanation of how to get a dev environment running.
     - [x] Create a new api key and restrict it for android apps.
     - [x] Add your package name and SHA-1 signing-certificate fingerprint.
     - [x] Enable Maps SDK for Android from API restrictions and Save.
-    - [x] Copy the api key to the `google_maps_api.xml`
+    - [ ] **Add a variable with name MAPS_API_KEY and your Google Maps API Key as the value in local.properties!!**
 - [x] Run the app on your mobile phone or emulator with Google Play Services in it.
-
-## Testing
-
-Right click on the `test` or `androidTest` packages and select Run Tests
-
-### Break Down Tests
-
-Explain what each test does and why
-
-```
-1.androidTest
-        //TODO: Students explain their testing here.
-2. test
-        //TODO: Students explain their testing here.
-```
 
 ## Project Instructions
 - [x] Create a Login screen to ask users to login using an email address or a Google account.  Upon successful login, navigate the user to the Reminders screen.   If there is no account, the app should navigate to a Register screen.
@@ -55,13 +42,13 @@ Explain what each test does and why
     - [x] description
     - [x] selected location
 - [x] Reminder data should be saved to local storage.
-- [ ] For each reminder, create a geofencing request in the background that fires up a notification when the user enters the geofencing area.
-- [ ] Provide testing for the ViewModels, Coroutines and LiveData objects.
-- [ ] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
-- [ ] Use Espresso and Mockito to test each screen of the app:
-    - [ ] Test DAO (Data Access Object) and Repository classes.
-    - [ ] Add testing for the error messages.
-    - [ ] Add End-To-End testing for the Fragments navigation.
+- [x] For each reminder, create a geofencing request in the background that fires up a notification when the user enters the geofencing area.
+- [x] Provide testing for the ViewModels, Coroutines and LiveData objects.
+- [x] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
+- [x] Use Espresso and Mockito to test each screen of the app:
+    - [x] Test DAO (Data Access Object) and Repository classes.
+    - [x] Add testing for the error messages.
+    - [x] Add End-To-End testing for the Fragments navigation.
 
 ## Rubric
 - [x] **User Authentication**
@@ -95,29 +82,29 @@ Explain what each test does and why
   - [x] Display details about a reminder when a selected POI is reached and the user clicked on the notification.
     - [x] When the user clicks a notification, when he clicks on it, a new screen appears to display the reminder details.
 - [ ] **Testing**
-  - [ ] Use MVVM and Dependency Injection to architect your app.
-    - [ ] The app follows the MVVM design pattern and uses ViewModels to hold the live data objects, do the validation and interact with the data sources.
-    - [ ] The student retrieved the ViewModels and DataSources using Koin.
-  - [ ] Test the ViewModels, Coroutines, and LiveData
-    - [ ] RemindersListViewModelTest or SaveReminderViewModelTest are present in the test package that tests the functions inside the view model.
+  - [x] Use MVVM and Dependency Injection to architect your app.
+    - [x] The app follows the MVVM design pattern and uses ViewModels to hold the live data objects, do the validation and interact with the data sources.
+    - [x] The student retrieved the ViewModels and DataSources using Koin.
+  - [x] Test the ViewModels, Coroutines, and LiveData
+    - [x] RemindersListViewModelTest or SaveReminderViewModelTest are present in the test package that tests the functions inside the view model.
     - [ ] Live data objects are tested using shouldReturnError and check_loading testing functions.
-  - [ ] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
-    - [ ] Project repo contains a FakeDataSource class that acts as a test double for the LocalDataSource.
-  - [ ] Use Espresso and Mockito to test the app UI and Fragments Navigation.
-    - [ ] Automation Testing using ViewMatchers and ViewInteractions to simulate user interactions with the app.
-    - [ ] Testing for Snackbar and Toast messages.
-    - [ ] Testing the fragments’ navigation.
-    - [ ] The testing classes are at androidTest package.
-  - [ ] Test DAO and Repository classes
-    - [ ] Testing uses Room.inMemoryDatabaseBuilder to create a Room DB instance.
-      - [ ] inserting and retrieving data using DAO.
-      - [ ] predictable errors like data not found.
-- [ ] **Code Quality**
-  - [ ] Write code using best practices for Android development with Kotlin
-    - [ ] Code uses meaningful variable names and method names that indicate what the method does.
+  - [x] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
+    - [x] Project repo contains a FakeDataSource class that acts as a test double for the LocalDataSource.
+  - [x] Use Espresso and Mockito to test the app UI and Fragments Navigation.
+    - [x] Automation Testing using ViewMatchers and ViewInteractions to simulate user interactions with the app.
+    - [x] Testing for Snackbar and Toast messages.
+    - [x] Testing the fragments’ navigation.
+    - [x] The testing classes are at androidTest package.
+  - [x] Test DAO and Repository classes
+    - [x] Testing uses Room.inMemoryDatabaseBuilder to create a Room DB instance.
+      - [x] inserting and retrieving data using DAO.
+      - [x] predictable errors like data not found.
+- [x] **Code Quality**
+  - [x] Write code using best practices for Android development with Kotlin
+    - [x] Code uses meaningful variable names and method names that indicate what the method does.
 - [ ] **Extra**
   - [ ] Test Coverage for the whole app.
-  - [ ] Update the app styling and map design using material design and map design.
+  - [x] Update the app styling and map design using material design and map design.
   - [ ] Edit and Delete Reminders and Geofence requests.
   - [ ] Allow the user to create a shape like polygons or circles on the map to select the area.
   - [ ] Allow the user to change the reminding location range.
