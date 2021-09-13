@@ -95,29 +95,29 @@ Explain what each test does and why
   - [x] Display details about a reminder when a selected POI is reached and the user clicked on the notification.
     - [x] When the user clicks a notification, when he clicks on it, a new screen appears to display the reminder details.
 - [ ] **Testing**
-  - [ ] Use MVVM and Dependency Injection to architect your app.
-    - [ ] The app follows the MVVM design pattern and uses ViewModels to hold the live data objects, do the validation and interact with the data sources.
-    - [ ] The student retrieved the ViewModels and DataSources using Koin.
-  - [ ] Test the ViewModels, Coroutines, and LiveData
-    - [ ] RemindersListViewModelTest or SaveReminderViewModelTest are present in the test package that tests the functions inside the view model.
+  - [x] Use MVVM and Dependency Injection to architect your app.
+    - [x] The app follows the MVVM design pattern and uses ViewModels to hold the live data objects, do the validation and interact with the data sources.
+    - [x] The student retrieved the ViewModels and DataSources using Koin.
+  - [x] Test the ViewModels, Coroutines, and LiveData
+    - [x] RemindersListViewModelTest or SaveReminderViewModelTest are present in the test package that tests the functions inside the view model.
     - [ ] Live data objects are tested using shouldReturnError and check_loading testing functions.
-  - [ ] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
-    - [ ] Project repo contains a FakeDataSource class that acts as a test double for the LocalDataSource.
+  - [x] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
+    - [x] Project repo contains a FakeDataSource class that acts as a test double for the LocalDataSource.
   - [ ] Use Espresso and Mockito to test the app UI and Fragments Navigation.
     - [ ] Automation Testing using ViewMatchers and ViewInteractions to simulate user interactions with the app.
     - [ ] Testing for Snackbar and Toast messages.
     - [ ] Testing the fragments’ navigation.
     - [ ] The testing classes are at androidTest package.
-  - [ ] Test DAO and Repository classes
-    - [ ] Testing uses Room.inMemoryDatabaseBuilder to create a Room DB instance.
-      - [ ] inserting and retrieving data using DAO.
-      - [ ] predictable errors like data not found.
-- [ ] **Code Quality**
-  - [ ] Write code using best practices for Android development with Kotlin
-    - [ ] Code uses meaningful variable names and method names that indicate what the method does.
+  - [x] Test DAO and Repository classes
+    - [x] Testing uses Room.inMemoryDatabaseBuilder to create a Room DB instance.
+      - [x] inserting and retrieving data using DAO.
+      - [x] predictable errors like data not found.
+- [x] **Code Quality**
+  - [x] Write code using best practices for Android development with Kotlin
+    - [x] Code uses meaningful variable names and method names that indicate what the method does.
 - [ ] **Extra**
   - [ ] Test Coverage for the whole app.
-  - [ ] Update the app styling and map design using material design and map design.
+  - [x] Update the app styling and map design using material design and map design.
   - [ ] Edit and Delete Reminders and Geofence requests.
   - [ ] Allow the user to create a shape like polygons or circles on the map to select the area.
   - [ ] Allow the user to change the reminding location range.
