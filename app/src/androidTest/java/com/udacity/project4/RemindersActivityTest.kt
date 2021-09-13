@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
+import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.local.LocalDB
 import com.udacity.project4.locationreminders.data.local.RemindersDatabase
 import com.udacity.project4.locationreminders.data.local.RemindersLocalRepository
@@ -115,6 +116,35 @@ class RemindersActivityTest :
         onView(withText(location)).check(matches(isDisplayed()))
 
         onView(withId(R.id.saveReminder)).perform(click())
+
+        onView(withId(R.id.addReminderFAB)).check(matches(isDisplayed()))
+        onView(withText(title)).check(matches(isDisplayed()))
+        onView(withText(location)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun existingReminder_clickReminder_showDescription_navigateBack() {
+        val title = "Title"
+        val desc = "Description"
+        val location = "Location"
+        runBlocking {
+            repository.saveReminder(ReminderDTO(title, desc, location, 0.0, 100.0))
+        }
+
+        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        onView(withId(R.id.addReminderFAB)).check(matches(isDisplayed()))
+        onView(withText(title)).check(matches(isDisplayed()))
+        onView(withText(location)).check(matches(isDisplayed()))
+
+        onView(withText(title)).perform(click())
+
+        onView(withId(R.id.map)).check(matches(isDisplayed()))
+        onView(withText(title)).check(matches(isDisplayed()))
+        onView(withText(desc)).check(matches(isDisplayed()))
+        onView(withId(R.id.backButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.backButton)).perform(click())
 
         onView(withId(R.id.addReminderFAB)).check(matches(isDisplayed()))
         onView(withText(title)).check(matches(isDisplayed()))
