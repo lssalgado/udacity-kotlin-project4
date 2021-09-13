@@ -6,13 +6,13 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
+import com.udacity.project4.util.compareReminders
 
 import org.junit.runner.RunWith;
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi;
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.*
 
@@ -96,15 +96,5 @@ class RemindersDaoTest {
                 Assert.fail("No reminder was found with the given ID!!")
             }
         }
-    }
-
-    private fun compareReminders(reminder: ReminderDTO, dbReminder: ReminderDTO?) {
-        assertThat(dbReminder as ReminderDTO, notNullValue())
-        assertThat(dbReminder.id, `is`(reminder.id))
-        assertThat(dbReminder.title, `is`(reminder.title))
-        assertThat(dbReminder.description, `is`(reminder.description))
-        assertThat(dbReminder.location, `is`(reminder.location))
-        assertThat(dbReminder.latitude, `is`(reminder.latitude))
-        assertThat(dbReminder.longitude, `is`(reminder.longitude))
     }
 }
