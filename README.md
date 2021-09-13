@@ -6,6 +6,8 @@ A Todo list app with location reminders that remind the user to do something whe
 
 1. Clone the project to your local machine.
 2. Open the project using Android Studio.
+3. Add a variable with name MAPS_API_KEY and your Google Maps API Key as the value in local.properties!!  
+  3.1 `MAPS_API_KEY=<your key>`
 
 ### Dependencies
 
@@ -27,23 +29,8 @@ Step by step explanation of how to get a dev environment running.
     - [x] Create a new api key and restrict it for android apps.
     - [x] Add your package name and SHA-1 signing-certificate fingerprint.
     - [x] Enable Maps SDK for Android from API restrictions and Save.
-    - [x] Copy the api key to the `google_maps_api.xml`
+    - [ ] **Add a variable with name MAPS_API_KEY and your Google Maps API Key as the value in local.properties!!**
 - [x] Run the app on your mobile phone or emulator with Google Play Services in it.
-
-## Testing
-
-Right click on the `test` or `androidTest` packages and select Run Tests
-
-### Break Down Tests
-
-Explain what each test does and why
-
-```
-1.androidTest
-        //TODO: Students explain their testing here.
-2. test
-        //TODO: Students explain their testing here.
-```
 
 ## Project Instructions
 - [x] Create a Login screen to ask users to login using an email address or a Google account.  Upon successful login, navigate the user to the Reminders screen.   If there is no account, the app should navigate to a Register screen.
