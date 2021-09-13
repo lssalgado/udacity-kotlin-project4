@@ -10,11 +10,13 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.*
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -39,6 +41,11 @@ import timber.log.Timber
 
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
+
+    companion object {
+        @VisibleForTesting
+        var dialogEditTextId: Int? = null
+    }
 
     private lateinit var marker: Marker
     private val requestCode = 1010
@@ -174,6 +181,11 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun showTitleDialog() {
         val editText = EditText(context!!)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            editText.id = View.generateViewId()
+            dialogEditTextId = editText.id
+        }
+
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.MATCH_PARENT
