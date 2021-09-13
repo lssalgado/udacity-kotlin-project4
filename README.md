@@ -55,13 +55,13 @@ Explain what each test does and why
     - [x] description
     - [x] selected location
 - [x] Reminder data should be saved to local storage.
-- [ ] For each reminder, create a geofencing request in the background that fires up a notification when the user enters the geofencing area.
-- [ ] Provide testing for the ViewModels, Coroutines and LiveData objects.
-- [ ] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
-- [ ] Use Espresso and Mockito to test each screen of the app:
-    - [ ] Test DAO (Data Access Object) and Repository classes.
-    - [ ] Add testing for the error messages.
-    - [ ] Add End-To-End testing for the Fragments navigation.
+- [x] For each reminder, create a geofencing request in the background that fires up a notification when the user enters the geofencing area.
+- [x] Provide testing for the ViewModels, Coroutines and LiveData objects.
+- [x] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
+- [x] Use Espresso and Mockito to test each screen of the app:
+    - [x] Test DAO (Data Access Object) and Repository classes.
+    - [x] Add testing for the error messages.
+    - [x] Add End-To-End testing for the Fragments navigation.
 
 ## Rubric
 - [x] **User Authentication**
@@ -103,11 +103,11 @@ Explain what each test does and why
     - [ ] Live data objects are tested using shouldReturnError and check_loading testing functions.
   - [x] Create a FakeDataSource to replace the Data Layer and test the app in isolation.
     - [x] Project repo contains a FakeDataSource class that acts as a test double for the LocalDataSource.
-  - [ ] Use Espresso and Mockito to test the app UI and Fragments Navigation.
-    - [ ] Automation Testing using ViewMatchers and ViewInteractions to simulate user interactions with the app.
-    - [ ] Testing for Snackbar and Toast messages.
-    - [ ] Testing the fragments’ navigation.
-    - [ ] The testing classes are at androidTest package.
+  - [x] Use Espresso and Mockito to test the app UI and Fragments Navigation.
+    - [x] Automation Testing using ViewMatchers and ViewInteractions to simulate user interactions with the app.
+    - [x] Testing for Snackbar and Toast messages.
+    - [x] Testing the fragments’ navigation.
+    - [x] The testing classes are at androidTest package.
   - [x] Test DAO and Repository classes
     - [x] Testing uses Room.inMemoryDatabaseBuilder to create a Room DB instance.
       - [x] inserting and retrieving data using DAO.
