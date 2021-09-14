@@ -149,10 +149,6 @@ class SaveReminderFragment : BaseFragment() {
 
             geofencingClient.addGeofences(geofenceRequest, geofencePendingIntent)?.run {
                 addOnSuccessListener {
-                    Toast.makeText(
-                        context, R.string.geofences_added,
-                        Toast.LENGTH_SHORT
-                    ).show()
                     Timber.e("Add Geofence ${geofence.requestId} lat:${latitude}, lng:${longitude}")
                     _viewModel.validateAndSaveReminder(reminder)
                 }
