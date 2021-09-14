@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,21 +12,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.google.android.gms.location.Geofence
-import com.google.android.gms.location.GeofencingClient
-import com.google.android.gms.location.GeofencingRequest
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
+import com.udacity.project4.locationreminders.RemindersActivity.Companion.REQUEST_TURN_DEVICE_LOCATION_ON
 import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import com.udacity.project4.utils.checkSelfPermissions
 import com.udacity.project4.utils.onPermissionResult
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
@@ -104,8 +103,15 @@ class SaveReminderFragment : BaseFragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == this.requestCode) {
             onPermissionResult(this.permissions, binding.root) {
-                addGeofence(reminder)
+                checkDeviceLocationSettingsAndStartGeofence(reminder)
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
+            checkDeviceLocationSettingsAndStartGeofence(reminder, false)
         }
     }
 
@@ -121,9 +127,42 @@ class SaveReminderFragment : BaseFragment() {
             val missingPermissions = checkSelfPermissions(permissions, context!!)
 
             if (missingPermissions.isEmpty()) {
-                addGeofence(reminder)
+                checkDeviceLocationSettingsAndStartGeofence(reminder)
             } else {
                 requestPermissions(missingPermissions, requestCode)
+            }
+        }
+    }
+
+    // Based on:
+    // https://classroom.udacity.com/courses/ud940/lessons/517042a4-d6f0-40f1-90c9-8ec5c7677097/concepts/320bc835-4cb9-406f-b60e-7cb671471ea1
+    private fun checkDeviceLocationSettingsAndStartGeofence(reminder: ReminderDataItem, resolve:Boolean = true) {
+        val locationRequest = LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_LOW_POWER
+        }
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val settingsClient = LocationServices.getSettingsClient(requireActivity())
+        val locationSettingsResponseTask =
+            settingsClient.checkLocationSettings(builder.build())
+        locationSettingsResponseTask.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException && resolve){
+                try {
+                    startIntentSenderForResult(exception.resolution.intentSender, REQUEST_TURN_DEVICE_LOCATION_ON, null, 0, 0, 0, null)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Timber.e("Error getting location settings resolution: ${sendEx.message}")
+                }
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    R.string.location_required_error, Snackbar.LENGTH_INDEFINITE
+                ).setAction(android.R.string.ok) {
+                    checkDeviceLocationSettingsAndStartGeofence(reminder)
+                }.show()
+            }
+        }
+        locationSettingsResponseTask.addOnCompleteListener {
+            if ( it.isSuccessful ) {
+                addGeofence(reminder)
             }
         }
     }
