@@ -37,6 +37,7 @@ import com.udacity.project4.utils.onPermissionResult
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import com.udacity.project4.utils.setMapStyle
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
 
@@ -74,7 +75,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var selectedLatLng: LatLng
 
     //Use Koin to get the view model of the SaveReminder
-    override val _viewModel: SaveReminderViewModel by inject()
+    override val _viewModel: SaveReminderViewModel by sharedViewModel()
     private lateinit var binding: FragmentSelectLocationBinding
 
     private lateinit var map: GoogleMap
