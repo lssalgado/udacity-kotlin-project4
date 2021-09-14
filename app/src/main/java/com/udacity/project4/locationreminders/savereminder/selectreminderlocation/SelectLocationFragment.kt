@@ -4,15 +4,11 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.content.res.Resources
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.*
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -21,13 +17,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
-import com.google.android.material.snackbar.Snackbar
-import com.udacity.project4.BuildConfig
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
@@ -36,9 +36,7 @@ import com.udacity.project4.utils.checkSelfPermissions
 import com.udacity.project4.utils.onPermissionResult
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import com.udacity.project4.utils.setMapStyle
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
 
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
@@ -56,7 +54,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         Manifest.permission.ACCESS_FINE_LOCATION
     )
 
-    private var permissionsGranted = false
 
     private val locationManager: LocationManager by lazy {
         requireActivity().getSystemService(
@@ -67,7 +64,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private val locationListener = LocationListener { location ->
         val longitude = location.longitude
         val latitude = location.latitude
-        zoomMapToLocation(longitude, latitude)
+        moveMapToDeviceLocation(longitude, latitude)
     }
 
     private var hasCentered = false
@@ -117,12 +114,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    private fun checkPermissions() {
+    private fun checkPermissions(): Boolean {
         val missingPermissions = checkSelfPermissions(permissions, context!!)
-        if (missingPermissions.isNotEmpty()) {
+        return if (missingPermissions.isNotEmpty()) {
             requestPermissions(missingPermissions, requestCode)
+            false
         } else {
-            permissionsGranted = true
+            true
         }
     }
 
@@ -134,7 +132,16 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == this.requestCode) {
             onPermissionResult(this.permissions, binding.root) {
-                permissionsGranted = true
+                enableMyLocation()
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation() {
+        if (checkPermissions()) {
+            if (::map.isInitialized) {
+                map.isMyLocationEnabled = true
                 waitForLocation()
             }
         }
@@ -142,14 +149,21 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun waitForLocation() {
-        if (checkSelfPermissions(permissions, context!!).isEmpty()) {
-            val location: Location? =
-                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if (location != null) {
-                val longitude: Double = location.longitude
-                val latitude: Double = location.latitude
-                zoomMapToLocation(longitude, latitude)
-            } else {
+        val location: Location? =
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        if (location != null) {
+            val longitude: Double = location.longitude
+            val latitude: Double = location.latitude
+            moveMapToDeviceLocation(longitude, latitude)
+        } else {
+            val locationRequest = LocationRequest.create().apply {
+                priority = LocationRequest.PRIORITY_LOW_POWER
+            }
+            val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+            val settingsClient = LocationServices.getSettingsClient(requireActivity())
+            val locationSettingsResponseTask =
+                settingsClient.checkLocationSettings(builder.build())
+            locationSettingsResponseTask.addOnSuccessListener {
                 val minTime = 5000L
                 val minDistance = 50f
                 locationManager.requestLocationUpdates(
@@ -162,13 +176,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        waitForLocation()
-    }
-
     @SuppressLint("MissingPermission")
-    private fun zoomMapToLocation(longitude: Double, latitude: Double) {
+    private fun moveMapToDeviceLocation(longitude: Double, latitude: Double) {
         locationManager.removeUpdates(locationListener)
 
         if (::map.isInitialized && !hasCentered) { // If map was not initialized, this method will be called again by onMapReady
@@ -237,9 +246,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        if (permissionsGranted) {
-            waitForLocation()
-        }
+
+        enableMyLocation()
+
         setMapLongClick()
         map.setMapStyle(context!!)
         setPoiClick()
