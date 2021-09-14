@@ -31,6 +31,7 @@ class RemindersActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val REQUEST_TURN_DEVICE_LOCATION_ON = 1001
         fun start(activity: Activity) {
             val intent = Intent(activity, RemindersActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

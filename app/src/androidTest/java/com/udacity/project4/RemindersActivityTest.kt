@@ -1,13 +1,16 @@
 package com.udacity.project4
 
+import android.app.Activity
 import android.app.Application
 import androidx.room.Room
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -22,8 +25,11 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragment
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorActivity
+import com.udacity.project4.utils.EspressoIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.*
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -50,6 +56,8 @@ class RemindersActivityTest :
      */
     @Before
     fun init() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
         stopKoin()//stop the original app koin
         appContext = getApplicationContext()
         val myModule = module {
@@ -86,6 +94,20 @@ class RemindersActivityTest :
         }
     }
 
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+    }
+
+    private fun getActivity(activityScenario: ActivityScenario<RemindersActivity>): Activity? {
+        var activity: Activity? = null
+        activityScenario.onActivity {
+            activity = it
+        }
+        return activity
+    }
+
     @Test
     fun createReminder_saveReminder_listReminder() {
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
@@ -117,6 +139,17 @@ class RemindersActivityTest :
 
         onView(withId(R.id.saveReminder)).perform(click())
 
+
+        val activity = getActivity(activityScenario)
+        assertThat(activity, notNullValue())
+        activity as Activity
+        onView(withText(R.string.reminder_saved)).inRoot(withDecorView(not(`is`(activity.window.decorView))))
+            .check(
+                matches(
+                    isDisplayed()
+                )
+            )
+
         onView(withId(R.id.addReminderFAB)).check(matches(isDisplayed()))
         onView(withText(title)).check(matches(isDisplayed()))
         onView(withText(location)).check(matches(isDisplayed()))
@@ -130,6 +163,9 @@ class RemindersActivityTest :
         runBlocking {
             repository.saveReminder(ReminderDTO(title, desc, location, 0.0, 100.0))
         }
+
+        // Won't use dataBindingIdlingResource since it tests more than one activity
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
 
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
