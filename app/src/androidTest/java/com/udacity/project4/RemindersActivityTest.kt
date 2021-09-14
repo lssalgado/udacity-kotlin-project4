@@ -164,6 +164,9 @@ class RemindersActivityTest :
             repository.saveReminder(ReminderDTO(title, desc, location, 0.0, 100.0))
         }
 
+        // Won't use dataBindingIdlingResource since it tests more than one activity
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
